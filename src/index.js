@@ -1,38 +1,27 @@
-const dogArr = data
+const dogArr = JSON.parse(JSON.stringify(data))
+console.log(dogArr)
 const headerList = document.querySelector(".dogs-list")
 const mainSection = document.querySelector(".main__dog-section")
 const addButton = document.querySelector(".dogs-list__button--add")
-const labelData = {
-        name: 
-        {
-            text:"Dog's name"
-            },
-        image:
-        {   
-            text:"Dog's picture"
-            },
-        bio:
-        {
-            text:"Dog's bio"
-            } 
-    }
-const inputData = {
-        name:
-        {
-            type:"text"
-        },
-        image:
-        {
-            type:"url"
-        },
-        submit:
-        {
-            type:"submit"
+
+function renderHeader(){
+    headerList.innerHTML = ""
+    headerList.appendChild(createAdd())
+    for (let i=0;i<dogArr.length;i++){
+        generateHeaderItem(i)
         }
-    }
-for (let i=0;i<data.length;i++){
-    generateHeaderItem(i)
+console.log(dogArr)
 }
+
+function createAdd(){
+    const add = document.createElement('li')
+    add.className = "dogs-list__button dogs-list__button--add"
+    add.innerText = '+'
+    add.addEventListener('click', generateForm)
+    return add
+}
+
+renderHeader()
 
 // WRITE YOUR CODE BELOW!
 function generateHeaderItem(index){
@@ -43,20 +32,18 @@ function generateHeaderItem(index){
     headerList.appendChild(newDog)
 }
 
-addButton.addEventListener('click', generateForm)
-
 function generateForm(){
     mainSection.innerHTML = ""
     mainSection.appendChild(generateHeader(2,"Add a new Dog"))
     const form = document.createElement('form')
     form.className = "form"
-    form.appendChild(generateLabel(labelData.name))
-    form.appendChild(generateInput(inputData.name))
-    form.appendChild(generateLabel(labelData.image))
-    form.appendChild(generateInput(inputData.image))
-    form.appendChild(generateLabel(labelData.bio))
+    form.appendChild(generateLabel('name'))
+    form.appendChild(generateInput('name'))
+    form.appendChild(generateLabel('image'))
+    form.appendChild(generateInput('image'))
+    form.appendChild(generateLabel('bio'))
     form.appendChild(generateTextArea(5,'bio'))
-    const submit = generateInput(inputData.submit)
+    const submit = generateInput('submit')
     submit.setAttribute("value", "Let's add a dog!")
     submit.className = "form__button"
     form.appendChild(submit)
@@ -65,22 +52,29 @@ function generateForm(){
 }
 
 function addNewDog(event){
-    data.unshift(event)
-    generateHeaderItem(0)
+    const newDog = {
+        id: dogArr.length+1,
+        name: document.getElementById('name').value,
+        image: document.getElementById('image').value,
+        bio: document.getElementById('bio').value
+    }
+    dogArr.push(newDog)
+    console.log(dogArr)
+    renderHeader()
     event.preventDefault()
 }
 
 function generateLabel(key){
     const label = document.createElement('label')
     label.setAttribute('for', key)
-    label.innerText = key.text
+    label.innerText = labelData[key].text
     return label
 }
 
 function generateInput(key){
     const input = document.createElement('input')
-    input.setAttribute("type",key.type)
-    input.setAttribute("id",key)
+    input.setAttribute("type",inputData[key].type)
+    input.setAttribute("id", key)
     input.setAttribute("name",key)
     return input
 }
@@ -97,7 +91,7 @@ function generateDogCard(dog){
     mainSection.innerHTML = ""
     mainSection.appendChild(generateHeader(2,dog.name))
     mainSection.appendChild(generateImg(dog.image))
-    mainSection.appendChild(generateMain())
+    mainSection.appendChild(generateMain(dog.bio))
     mainSection.appendChild(generateButton())
 }
 
@@ -115,9 +109,9 @@ function generateImg(src){
     return img
 }
 
-function generateLorem(){
+function generateBio(bio){
     const p = document.createElement('p')
-    p.innerText = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt quod modi amet cumque ullam est, beatae ipsa quibusdam aliquam labore dicta officia suscipit nostrum vero! Amet suscipit ullam tenetur fuga?"
+    p.innerText = bio
     return p
 }
 
@@ -134,10 +128,10 @@ function generateButton(){
     return div
 }
 
-function generateMain(){
+function generateMain(bio){
     const main = document.createElement('div')
     main.className = "main__dog-section__desc"
     main.appendChild(generateHeader(3,'Bio'))
-    main.appendChild(generateLorem())
+    main.appendChild(generateBio(bio))
     return main
 }

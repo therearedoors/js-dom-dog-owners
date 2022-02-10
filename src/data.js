@@ -68,4 +68,35 @@ const data = [
   }
 ];
 
+const labelData = {
+  'name': 
+  {
+      'text':"Dog's name"
+      },
+  'image':
+  {   
+      'text':"Dog's picture"
+      },
+  'bio':
+  {
+      'text':"Dog's bio"
+      } 
+}
+const inputData = {
+  'name':
+  {
+      'type':"text"
+  },
+  'image':
+  {
+      'type':"url"
+  },
+  'submit':
+  {
+      'type':"submit"
+  }
+}
+
 window.data = data;
+window.labelData = labelData;
+window.inputData = inputData;
