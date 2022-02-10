@@ -1,38 +1,33 @@
 const dogArr = JSON.parse(JSON.stringify(data))
-console.log(dogArr)
 const headerList = document.querySelector(".dogs-list")
 const mainSection = document.querySelector(".main__dog-section")
 const addButton = document.querySelector(".dogs-list__button--add")
 
 function renderHeader(){
     headerList.innerHTML = ""
-    headerList.appendChild(createAdd())
+    headerList.appendChild(generateAdd())
     for (let i=0;i<dogArr.length;i++){
         generateHeaderItem(i)
         }
-console.log(dogArr)
 }
 
-function createAdd(){
+function generateAdd(){
     const add = document.createElement('li')
     add.className = "dogs-list__button dogs-list__button--add"
     add.innerText = '+'
-    add.addEventListener('click', generateForm)
+    add.addEventListener('click', renderForm)
     return add
 }
 
-renderHeader()
-
-// WRITE YOUR CODE BELOW!
 function generateHeaderItem(index){
     const newDog = document.createElement('li')
     newDog.innerText = dogArr[index].name
     newDog.className = 'dogs-list__button'
-    newDog.addEventListener('click', function() {generateDogCard(dogArr[index])})
+    newDog.addEventListener('click', function() {renderDogCard(dogArr[index])})
     headerList.appendChild(newDog)
 }
 
-function generateForm(){
+function renderForm(){
     mainSection.innerHTML = ""
     mainSection.appendChild(generateHeader(2,"Add a new Dog"))
     const form = document.createElement('form')
@@ -59,7 +54,6 @@ function addNewDog(event){
         bio: document.getElementById('bio').value
     }
     dogArr.push(newDog)
-    console.log(dogArr)
     renderHeader()
     event.preventDefault()
 }
@@ -87,12 +81,12 @@ function generateTextArea(rows, key){
     return textarea
 }
 
-function generateDogCard(dog){
+function renderDogCard(dog){
     mainSection.innerHTML = ""
     mainSection.appendChild(generateHeader(2,dog.name))
     mainSection.appendChild(generateImg(dog.image))
     mainSection.appendChild(generateMain(dog.bio))
-    mainSection.appendChild(generateButton())
+    mainSection.appendChild(generateButton(dog))
 }
 
 function generateHeader(headerNo, name){
@@ -115,14 +109,20 @@ function generateBio(bio){
     return p
 }
 
-function generateButton(){
+function generateButton(dog){
     const div = document.createElement('div')
+    const isNaughty = dog.isGoodDog ? "yes" : "no"
     div.className = "main__dog-section__btn"
     const p = document.createElement('p')
-    p.innerHTML = "<em>Is naughty?</em> yes!"
+    p.innerHTML = "<em>Is naughty?</em> "+`${isNaughty}`+'!'
     div.appendChild(p)
     const button = document.createElement('button')
     button.innerText = "Good dog!"
+    button.addEventListener('click', function(event){
+        event.preventDefault()
+        if (dog.isGoodDog) {dog.isGoodDog = false; p.innerHTML = `<em>Is naughty?</em> no!`}
+        else if (!dog.isGoodDog) {dog.isGoodDog = true; p.innerHTML = `<em>Is naughty?</em> yes!`}
+    })
     div.appendChild(button)
     console.log(div)
     return div
@@ -135,3 +135,5 @@ function generateMain(bio){
     main.appendChild(generateBio(bio))
     return main
 }
+
+renderHeader()
