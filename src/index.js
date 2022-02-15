@@ -117,11 +117,11 @@ function generateButton(dog){
     p.innerHTML = "<em>Is naughty?</em> "+`${isNaughty}`+'!'
     div.appendChild(p)
     const button = document.createElement('button')
-    button.innerText = "Good dog!"
+    button.innerText = dog.isGoodDog ? "Bad dog!" : "Good dog!"
     button.addEventListener('click', function(event){
         event.preventDefault()
-        if (dog.isGoodDog) {dog.isGoodDog = false; p.innerHTML = `<em>Is naughty?</em> no!`}
-        else if (!dog.isGoodDog) {dog.isGoodDog = true; p.innerHTML = `<em>Is naughty?</em> yes!`}
+        if (dog.isGoodDog) {dog.isGoodDog = false; p.innerHTML = `<em>Is naughty?</em> no!`; button.innerText = "Good dog!"}
+        else if (!dog.isGoodDog) {dog.isGoodDog = true; p.innerHTML = `<em>Is naughty?</em> yes!`; button.innerText = "Bad dog!"}
     })
     div.appendChild(button)
     console.log(div)
